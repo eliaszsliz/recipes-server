@@ -5,7 +5,7 @@ from django.utils.text import slugify
 
 class Tag(models.Model):
     name = models.CharField(max_length=63)
-    slug = models.SlugField(unique=True)
+    slug = models.SlugField(unique=True, blank=True, null=True)
     description = models.TextField(null=True, blank=True)
 
     def __str__(self):
@@ -15,14 +15,15 @@ class Tag(models.Model):
         self.slug = slugify(self.name)
         super(Tag, self).save(*args, **kwargs)
 
+
 class Recipe(models.Model):
     name = models.CharField(max_length=50)
-    slug = models.SlugField(unique=True)
+    slug = models.SlugField(unique=True, blank=True, null=True)
 
-    image = models.ImageField()
+    image = models.ImageField(blank=True, null=True)
     body = models.TextField()
-    tags = models.ManyToManyField(Tag, related_name='recipes')
-    favourites = models.ManyToManyField(User, related_name='favoured')
+    tags = models.ManyToManyField(Tag, related_name='recipes', blank=True)
+    favourites = models.ManyToManyField(User, related_name='favoured', blank=True)
 
     DIFFICULTY_CHOICES = (
         ('easy', 'Easy'),
@@ -30,7 +31,10 @@ class Recipe(models.Model):
         ('hard', 'Hard'),
     )
 
-    difficulty = models.CharField(max_length=6, choices=DIFFICULTY_CHOICES, default='medium')
+    difficulty = models.CharField(max_length=6,
+                                  choices=DIFFICULTY_CHOICES,
+                                  default='medium',
+                                  blank=True, null=True)
     time_need = models.SmallIntegerField(null=True, blank=True)
     portions = models.SmallIntegerField(null=True, blank=True)
 
