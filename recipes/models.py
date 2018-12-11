@@ -1,12 +1,13 @@
 from django.contrib.auth.models import User
 from django.db import models
 from django.utils.text import slugify
+from tinymce.models import HTMLField
 
 
 class Tag(models.Model):
     name = models.CharField(max_length=63)
     slug = models.SlugField(unique=True, blank=True, null=True)
-    description = models.TextField(null=True, blank=True)
+    description = HTMLField(blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -21,7 +22,7 @@ class Recipe(models.Model):
     slug = models.SlugField(unique=True, blank=True, null=True)
 
     image = models.ImageField(blank=True, null=True)
-    body = models.TextField()
+    body = HTMLField()
     tags = models.ManyToManyField(Tag, related_name='recipes', blank=True)
     favourites = models.ManyToManyField(User, related_name='favoured', blank=True)
 
@@ -38,7 +39,7 @@ class Recipe(models.Model):
     time_need = models.SmallIntegerField(null=True, blank=True)
     portions = models.SmallIntegerField(null=True, blank=True)
 
-    description = models.TextField(null=True, blank=True)
+    description = HTMLField(null=True, blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
 

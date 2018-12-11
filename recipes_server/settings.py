@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'tinymce',
     'graphene_django',
 
     'recipes'
@@ -145,3 +146,8 @@ AUTHENTICATION_BACKENDS = [
     'graphql_jwt.backends.JSONWebTokenBackend',
     'django.contrib.auth.backends.ModelBackend',
 ]
+
+TINYMCE_DEFAULT_CONFIG = {
+    'height': 500,
+    'width': 800
+}
