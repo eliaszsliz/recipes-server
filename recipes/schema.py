@@ -12,6 +12,9 @@ class TagType(DjangoObjectType):
 
 
 class RecipeType(DjangoObjectType):
+    thumbnail_url = graphene.String(source='thumbnail_url')
+    background_url = graphene.String(source='background_url')
+
     class Meta:
         model = Recipe
         # filter_fields = {

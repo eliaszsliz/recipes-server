@@ -38,6 +38,7 @@ INSTALLED_APPS = [
 
     'tinymce',
     'graphene_django',
+    'imagekit',
 
     'recipes'
 ]
@@ -135,6 +136,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
+MEDIA_URL = '/media/'
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+
 
 GRAPHENE = {
     'MIDDLEWARE': [

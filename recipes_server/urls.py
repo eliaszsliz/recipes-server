@@ -17,11 +17,20 @@ import tinymce.urls
 from django.contrib import admin
 from django.urls import path, include
 from django.views.decorators.csrf import csrf_exempt
+
+from recipes_server import settings
 from recipes_server.schema import schema
 from graphene_django.views import GraphQLView
+
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('graphql/', csrf_exempt(GraphQLView.as_view(graphiql=True, schema=schema))),
     path('tinymce/', include('tinymce.urls')),
 ]
+
+if settings.DEBUG:
+    # static files (images, css, javascript, etc.)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
