@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'graphene_django',
     'imagekit',
 
-    'recipes'
+    'recipes',
+    'tokenauth'
 ]
 
 if DEBUG:
@@ -147,6 +148,8 @@ GRAPHENE = {
         'graphql_jwt.middleware.JSONWebTokenMiddleware',
     ],
 }
+
+
 
 AUTHENTICATION_BACKENDS = [
     'graphql_jwt.backends.JSONWebTokenBackend',

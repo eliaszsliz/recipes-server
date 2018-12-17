@@ -1,11 +1,33 @@
 import graphene
+import graphql_jwt
 from django.contrib.auth.models import User
+from graphene_django import DjangoObjectType
 from graphql import GraphQLError
 
 
-class Error(graphene.ObjectType):
+
+class ErrorType(graphene.ObjectType):
     field = graphene.String()
     message = graphene.String()
+
+
+class UserType(DjangoObjectType):
+    only_fields = ('username', 'id', 'email')
+    favoured_ids = graphene.List(graphene.Int)
+
+    class Meta:
+        model = User
+
+    def resolve_favoured_ids(self, info):
+        return [recipe.pk for recipe in self.favoured.all()]
+
+
+class ObtainJSONWebToken(graphql_jwt.JSONWebTokenMutation):
+    user = graphene.Field(UserType)
+
+    @classmethod
+    def resolve(cls, root, info):
+        return cls(user=info.context.user)
 
 
 class Register(graphene.Mutation):
@@ -16,9 +38,10 @@ class Register(graphene.Mutation):
         password_repeat = graphene.String(required=True)
 
     success = graphene.Boolean()
-    errors = graphene.List(Error)
+    errors = graphene.List(ErrorType)
 
     def mutate(self, info, email, password, username, password_repeat):
+        # todo error handling
         if password == password_repeat:
             try:
                 user = User.objects.create(
@@ -32,14 +55,14 @@ class Register(graphene.Mutation):
 
             except Exception:
                 errors = [
-                    Error(field='email', message='Email already registered'),
-                    Error(field='username', message='Username is '),
+                    ErrorType(field='email', message='Email already registered'),
+                    ErrorType(field='username', message='Username is '),
                 ]
                 raise GraphQLError('Email / Username already registered')
                 #return Register(success=False, errors=errors)
         # todo check for username too
         errors = [
-            Error(field='password', message='Passwords don\'t match'),
+            ErrorType(field='password', message='Passwords don\'t match'),
         ]
         raise GraphQLError('Passwords don\'t match')
         # return Register(success=False, errors=errors)
