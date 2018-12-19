@@ -14,17 +14,21 @@ import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+FILES_BASE_DIR = os.environ.get('FILES_BASE_DIR', BASE_DIR)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '204$9!p4zdo**8+1t!smdxxpjz@=7v)lhb4#rp61x3l_inozp*'
+SECRET_KEY = os.environ.get('SECRET_KEY', '204$9!p4zdo**8+1t!smdxxpjz@=7v)lhb4#rp61x3l_inozp*')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    '127.0.0.1',
+    '193.33.111.200',
+    'localhost']
 
 # Application definition
 
@@ -98,7 +102,7 @@ WSGI_APPLICATION = 'recipes_server.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'NAME': os.path.join(FILES_BASE_DIR, 'db', 'db.sqlite3')
     }
 }
 
@@ -139,8 +143,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+STATIC_ROOT = os.path.join(FILES_BASE_DIR, 'static')
+MEDIA_ROOT = os.path.join(FILES_BASE_DIR, 'media')
 
 
 GRAPHENE = {

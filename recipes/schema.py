@@ -39,6 +39,7 @@ class Query(object):
     all_tags = graphene.List(TagType)
     recipes_filter = graphene.List(RecipeType,
                                    query=graphene.String(),
+                                   amount=graphene.Int(),
                                    ids=graphene.List(graphene.Int))
 
 
@@ -51,12 +52,16 @@ class Query(object):
     def resolve_recipes_filter(self, info, **kwargs):
         query = kwargs.get('query')
         ids = kwargs.get('ids')
+        amount = kwargs.get('amount')
 
         if query is not None:
             return Recipe.objects.filter(slug__icontains=query)
 
         if ids is not None:
             return Recipe.objects.filter(id__in=ids)
+
+        if amount is not None:
+            return Recipe.objects.all()[:amount]
 
         return Recipe.objects.none()
 
